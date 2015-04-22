@@ -8,7 +8,6 @@ Stable tag: 2.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/copyleft/gpl.html
 
-== Description ==
 Just simply check your variables.
 You can use it either in Query Monitor result and independently.
 If you want to use it in Query Monitor result, install <a href="https://wordpress.org/plugins/query-monitor/">Query Monitor</a>.
