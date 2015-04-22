@@ -9,7 +9,9 @@ License: GPLv3 or later
 License URI: https://www.gnu.org/copyleft/gpl.html
 
 Just simply check your variables.
+
 You can use it either in Query Monitor result and independently.
+
 If you want to use it in Query Monitor result, install <a href="https://wordpress.org/plugins/query-monitor/">Query Monitor</a>.
 
 == Installation ==
@@ -18,7 +20,7 @@ If you want to use it in Query Monitor result, install <a href="https://wordpres
 1. Go to the plugins page in your Wordpress admin panel and click "Activate"
 
 == Usage ==
-1. Using console($var); function, you can check what the variable contains.
+1. Using console( $var [, $var [, $var]] ... ); function, you can check what the variable contains.
 1. You can check it on the Query Monitor - Variable Checking or your wp_footer.
 
 == Screenshots ==
