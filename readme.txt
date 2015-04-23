@@ -15,7 +15,7 @@ Are you a Wordpress Developer? Just simply check the values of your variables. Y
 
 For more information, please visit my <a href="https://github.com/sujin2f/wp-hacks">Wordpress Developer's Reference GitHub repo</a>.
 
-=== Usage ===
+= Usage =
 1. Using console( $var [, $var [, $var]] ... ); function, you can check what the variable contains.
 2. You can check it on the Query Monitor - Variable Checking or your wp_footer.
 
