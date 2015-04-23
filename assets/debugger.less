@@ -1,0 +1,38 @@
+body.wp-admin .SJ_Debugger dl {
+	margin:0;
+}
+
+body.wp-admin div.SJ_Debugger {
+	background-color:#FFFFFF !important;
+	margin:0 0 0 160px !important;
+	padding:30px 20px;
+	background-color:inherit;
+	clear:both;
+}
+
+.SJ_Debugger {
+	@GRAY: #CCCCCC;
+	@DARK-GRAY: #777777;
+	@GREEN: #4E9A06;
+	@RED: #CC0000;
+	@BLUE: #0074A2;
+
+	dl { margin:0; padding:5px 0; }
+	dl dl {border-left:1px solid @GRAY; padding-left:15px;}
+	dt {float:none; clear:both;}
+	dd {margin-bottom:0; display:none;}
+
+	dd.empty {color:@GRAY; display:block;}
+	dd.integer {color:@GREEN; display:block;}
+	dd.double {color:@GREEN; display:block;}
+	dd.string {color:@RED; display:block;}
+	dd.boolean-true {color:@BLUE; display:block;}
+	dd.boolean-false {color:@GRAY; display:block;}
+
+	dt.empty {color:@GRAY;}
+
+	.fleft { float:left; margin-right:15px; }
+	.key {color:@DARK-GRAY;}
+	.size { font-style:italic; font-weight:normal; }
+	.object { font-weight:normal; }
+}
