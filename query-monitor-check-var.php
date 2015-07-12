@@ -1,18 +1,14 @@
 <?php
 /**
  * Plugin Name: Query Monitor Extension - Checking Variables
- * Plugin URI:
- * Description:
- * Version: 2.0
- * Author: Sujin
+ * Plugin URI: http://www.sujinc.com/
+ * Description: Variables Checker for Developers
+ * Version: 3.0
+ * Author: Sujin 수진 Choi
  * Author URI: http://www.sujinc.com/
  * License: GPLv3 or later
  * Text Domain: query-monitor-check-var
  */
-
-error_reporting(-1);
-ini_set( 'error_reporting', E_ALL );
-
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
@@ -40,4 +36,10 @@ if ( !defined( 'QMCV_PLUGIN_NAME' ) ) {
 }
 
 # Load Classes
-include_once( QMCV_CLASS_DIR . 'class.init.php');
+include_once( QMCV_CLASS_DIR . 'admin_plugins.php');
+include_once( QMCV_CLASS_DIR . 'options.php');
+include_once( QMCV_CLASS_DIR . 'io.php');
+include_once( QMCV_CLASS_DIR . 'init.php');
+
+QMCV::initialize();
+
