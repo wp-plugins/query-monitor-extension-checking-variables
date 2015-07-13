@@ -1,38 +1,22 @@
 jQuery( document ).ready( function ($) {
-	$( '.SJ_Debugger dt' ).each( function() {
-		if ( !$(this).next( 'dd' ).attr( 'class' ) ) $(this).css({ 'cursor' : 'pointer' });
-	} );
-
-	$( '.SJ_Debugger dt' ).click( function( e ) {
+	$( '.QMCV_IO dt.foldable' ).click( function( e ) {
 		e.preventDefault();
 
-		if ( $(this).next( 'dd' ).attr( 'class' ) ) return false;
-		$(this).next( 'dd' ).toggle();
-	} );
+		var id = $(this).attr( 'data-id' );
 
-	$( '#btn-IndependVarCheck' ).click( function( e ) {
-		e.preventDefault();
+		if ( $(this).find( 'span.dashicons' ).hasClass( 'dashicons-arrow-down' ) ) {
+			$(this).find( 'span.dashicons' ).attr( 'class', 'dashicons dashicons-arrow-right' );
+		} else {
+			$(this).find( 'span.dashicons' ).attr( 'class', 'dashicons dashicons-arrow-down' );
+		}
 
-		var data = {
-			'action': 'QMCV_CHANGE_MODE',
-			'mode': 'stand alone',
-		};
-
-		$.post( ajaxurl, data, function( response ) {
-			$( '#btn-IndependVarCheck' ).html( "Success!" );
-		});
+		$( '.QMCV_IO dd[data-id="' + id + '"]' ).toggle();
 	});
 
-	$( '#btn-DependVarCheck' ).click( function( e ) {
+	$( '.QMCV_IO h3' ).click( function( e ) {
 		e.preventDefault();
 
-		var data = {
-			'action': 'QMCV_CHANGE_MODE',
-			'mode': 'extended',
-		};
-
-		$.post( ajaxurl, data, function( response ) {
-			$( '#btn-DependVarCheck' ).html( "Success!" );
-		});
+		var id = $(this).attr( 'data-id' );
+		$( 'dl[data-id="' + id + '"]' ).toggle();
 	});
 } );

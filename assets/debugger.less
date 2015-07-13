@@ -1,38 +1,108 @@
-body.wp-admin .SJ_Debugger dl {
-	margin:0;
-}
-
-body.wp-admin div.SJ_Debugger {
-	background-color:#FFFFFF !important;
-	margin:0 0 0 160px !important;
-	padding:30px 20px;
-	background-color:inherit;
-	clear:both;
-}
-
-.SJ_Debugger {
+.QMCV_IO {
 	@GRAY: #CCCCCC;
+	@LIGHT-GRAY: #EEEEEE;
 	@DARK-GRAY: #777777;
 	@GREEN: #4E9A06;
 	@RED: #CC0000;
 	@BLUE: #0074A2;
 
-	dl { margin:0; padding:5px 0; }
-	dl dl {border-left:1px solid @GRAY; padding-left:15px;}
-	dt {float:none; clear:both;}
-	dd {margin-bottom:0; display:none;}
+	body.wp-admin & {
+		margin:20px 30px 20px 170px;
+		padding: 20px 30px 60px 30px;
 
-	dd.empty {color:@GRAY; display:block;}
-	dd.integer {color:@GREEN; display:block;}
-	dd.double {color:@GREEN; display:block;}
-	dd.string {color:@RED; display:block;}
-	dd.boolean-true {color:@BLUE; display:block;}
-	dd.boolean-false {color:@GRAY; display:block;}
+		@media (max-width: 960px) {
+			margin:20px 30px 20px 40px;
+		}
 
-	dt.empty {color:@GRAY;}
+		@media (max-width: 782px) {
+			margin:0;
+			padding: 0 10px 60px;
+		}
+	}
 
-	.fleft { float:left; margin-right:15px; }
-	.key {color:@DARK-GRAY;}
-	.size { font-style:italic; font-weight:normal; }
-	.object { font-weight:normal; }
+	margin:20px 30px;
+	padding:20px 30px;
+
+	body.wp-admin .QMCV_Table & {
+		margin:0;
+		padding:0;
+	}
+
+	h3 {
+		font-size:20px;
+		margin-bottom:5px;
+		cursor:pointer;
+
+		span {
+			font-size:13px;
+			color:@RED;
+			font-weight: normal;
+		}
+	}
+
+	div.file {
+		color:@BLUE;
+		font-size:13px;
+		border-bottom:1px solid @GRAY;
+		padding-bottom:10px;
+
+		span {
+			color:@RED;
+		}
+	}
+
+	dl {
+		margin:0 30px;
+
+		span {
+			font-weight: normal;
+			margin-left:10px;
+
+			&.type {
+				color:@GREEN;
+			}
+
+			&.value {
+				color:@RED;
+			}
+
+			&.class_keyword {
+				color:@RED;
+				margin:0;
+			}
+
+			&.dashicons {
+				color: @RED;
+				margin: 0;
+				text-align: center;
+				line-height:36px;
+			}
+		}
+	}
+
+	> dl {
+		padding:5px 0;
+		margin:0;
+		line-height:35px;
+	}
+
+	dt {
+		margin:0;
+
+		&.foldable {
+			cursor:pointer;
+		}
+	}
+
+	dd {
+		margin:0;
+	}
+
+
+
+
+	.QMCV_value {
+		background-color: @LIGHT-GRAY;
+		padding:20px;
+	}
 }

@@ -1,10 +1,10 @@
 === Query Monitor Extension : Checking Variable ===
 Contributors: sujin2f
-Donate link: http://www.sujinc.com/gallery/2d-tag-cloud-widget/
+Donate link: http://www.sujinc.com/donation/
 Tags: query, monitor, debug, develop
-Requires at least: 4.1.1
-Tested up to: 4.1.1
-Stable tag: 2.0
+Requires at least: 4.2.2
+Tested up to: 4.2.2
+Stable tag: 3.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/copyleft/gpl.html
 
@@ -31,11 +31,19 @@ For more information, please visit my <a href="https://github.com/sujin2f/wp-hac
 3. Go to the plugins page in your Wordpress admin panel and click "Activate"
 
 == Screenshots ==
-1. Position on Query Monitor
-2. Example Result 1
-3. Example Result 2
+1. Options
+2. Position on Query Monitor
+3. Result on Query Monitor
+4. Result on Footer
+5. Result on Javascript Console
 
 == Changelog ==
+= 3.0 =
+* Improvement
+- Output Style : Show Variable Name, Show Variable Location
+- Javascript Console Screen
+- Capability Control
+
 = 2.0 =
 * Make it can be used independently.
 
