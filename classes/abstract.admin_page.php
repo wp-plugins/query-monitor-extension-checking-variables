@@ -4,7 +4,7 @@
  *
  * @author Sujin 수진 Choi
  * @package wp-hacks
- * @version 1.0.0
+ * @version 1.0.1
  *
  */
 
@@ -21,6 +21,9 @@ if ( !class_exists('WP_Admin_Page' ) ) {
 		private $capability;
 		private $callback;
 		private $key;
+
+		private $file;
+		public $url;
 
 		public function __call( $name, $arguments ) {
 			if ( $name === 'view_' . $this->callback ) {
@@ -39,7 +42,8 @@ if ( !class_exists('WP_Admin_Page' ) ) {
 				'position' => 'option',
 				'name' => 'Page Name',
 				'cap' =>'activate_plugins',
-				'callback' => 'view_option'
+				'callback' => 'view_option',
+				'setting_button' => false
 			), $options ) );
 
 			$this->position = $position;
@@ -49,28 +53,36 @@ if ( !class_exists('WP_Admin_Page' ) ) {
 			$this->key = get_class( $this );
 
 			add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
+
+			if ( $setting_button ) {
+				add_filter( 'plugin_row_meta' , array( $this, 'add_setting_into_plugins_table' ), 15, 3 );
+				$this->file = $setting_button;
+			}
 		}
 
 		function add_admin_menu() {
 			switch ( $this->position ) {
 				case 'option' :
 					add_options_page( $this->page_name, $this->page_name, $this->capability, $this->key, array( $this, 'view_' . $this->callback ));
+					$this->url = admin_url( 'options-general.php?page=' . $this->key );
 				break;
 			}
 		}
 
 		function page__header() {
-			?>
-			<div class="wrap" id="<?php echo $this->key ?>">
-				<h2><?php echo $this->page_name ?></h2>
-				<div class="clear"></div>
-			<?php
+			printf( '<div class="wrap" id="%s"><h2>%s</h2><div class="clear"></div>', $this->key, $this->page_name );
 		}
 
 		function page__footer() {
-			?>
-			</div>
-			<?php
+			echo '</div>';
+		}
+
+		function add_setting_into_plugins_table( $plugin_meta, $file, $plugin_data ) {
+			if ( strpos( $file, $this->file ) !== false ) {
+				$plugin_meta[] = sprintf( '<a href="%s">Setting</a>', $this->url );
+			}
+
+			return $plugin_meta;
 		}
 	}
 }

@@ -4,7 +4,7 @@ Donate link: http://www.sujinc.com/donation/
 Tags: query, monitor, debug, develop
 Requires at least: 4.2.2
 Tested up to: 4.2.2
-Stable tag: 3.0
+Stable tag: 3.0.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/copyleft/gpl.html
 
@@ -38,6 +38,10 @@ For more information, please visit my <a href="https://github.com/sujin2f/wp-hac
 5. Result on Javascript Console
 
 == Changelog ==
+= 3.0.1 =
+* Fix Plugins Page Setting Link
+* Fix Javascript Console Error
+
 = 3.0 =
 * Improvement
 - Output Style : Show Variable Name, Show Variable Location

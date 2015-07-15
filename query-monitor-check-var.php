@@ -3,14 +3,18 @@
  * Plugin Name: Query Monitor Extension - Checking Variables
  * Plugin URI: http://www.sujinc.com/
  * Description: Variables Checker for Developers
- * Version: 3.0
+ * Version: 3.0.1
  * Author: Sujin 수진 Choi
  * Author URI: http://www.sujinc.com/
  * License: GPLv3 or later
  * Text Domain: query-monitor-check-var
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( !defined( 'ABSPATH' ) ) {
+	header( 'Status: 403 Forbidden' );
+	header( 'HTTP/1.1 403 Forbidden' );
+	exit();
+}
 
 # Definitions
 if ( !defined( 'QMCV_PLUGIN_NAME' ) ) {
@@ -39,7 +43,6 @@ if ( !defined( 'QMCV_PLUGIN_NAME' ) ) {
 }
 
 # Load Classes
-include_once( QMCV_CLASS_DIR . 'admin_plugins.php');
 include_once( QMCV_CLASS_DIR . 'abstract.admin_page.php');
 include_once( QMCV_CLASS_DIR . 'check_variables_options.php');
 include_once( QMCV_CLASS_DIR . 'io.php');

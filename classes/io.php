@@ -53,7 +53,7 @@ class QMCV_IO {
 					}
 
 					if ( Check_Variables_Options::get_console() && !$query_monitor ) {
-						self::structure2json( self::$message_sandbox );
+						self::structure2json( self::$message_sandbox, self::$json_sandbox );
 						$json = json_encode( self::$json_sandbox );
 						$json = str_replace( "'", "\'", $json );
 						?>
@@ -175,7 +175,7 @@ class QMCV_IO {
 		}
 	}
 
-	static function structure2json( $message_sandbox ) {
+	static function structure2json( $message_sandbox, &$json_sandbox ) {
 		foreach( $message_sandbox as $key => $message ) {
 			$visibility = 'public';
 
@@ -190,17 +190,18 @@ class QMCV_IO {
 			}
 
 			if ( is_array( $message ) ) {
-				self::$json_sandbox[$key] = array(
+				$json_sandbox[$key] = array(
 					'visibility' => $visibility,
 					'type' => strtolower( $message['type'] )
 				);
 				if ( !$message['value'] ) {
-					self::$json_sandbox[$key]['value'] = array();
+					$json_sandbox[$key]['value'] = array();
 				} else {
-					self::$json_sandbox[$key]['value'] = self::structure2json( $message['value'] );
+					$json_sandbox[$key]['value'] = false;
+					self::structure2json( $message['value'], $json_sandbox[$key]['value'] );
 				}
 			} else {
-				self::$json_sandbox[$key] = str_replace( array( "\"" ), array( "\\\"" ), $message );
+				$json_sandbox[$key] = str_replace( array( "\"" ), array( "\\\"" ), $message );
 
 			}
 		}

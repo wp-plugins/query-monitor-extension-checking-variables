@@ -33,10 +33,11 @@ class QMCV {
 
 		if ( is_admin() ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ) );
-			QMCV_AdminPlugins::hook();
-			$QMCV_AdminPage = new Check_Variables_Options( array(
+
+			$this->QMCV_AdminPage = new Check_Variables_Options( array(
 				'name' => 'Check Variables',
-				'callback' => 'check_var'
+				'callback' => 'check_var',
+				'setting_button' => QMCV_PLUGIN_NAME
 			) );
 		}
 	}
