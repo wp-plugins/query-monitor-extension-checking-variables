@@ -22,7 +22,7 @@ class QMCV {
 	private $QMCV_AdminPage;
 
 	function __construct() {
-		self::$style_path = QMCV_ASSETS_URL . 'debugger.css';
+		self::$style_path = QMCV_ASSETS_URL . 'css/checking-vars.css';
 		self::$script_path = QMCV_ASSETS_URL . 'debugger.min.js';
 
 		register_activation_hook( QMCV_PLUGIN_BASE , array( $this, 'activate' ) );
@@ -35,9 +35,20 @@ class QMCV {
 			add_action( 'admin_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ) );
 
 			$this->QMCV_AdminPage = new Check_Variables_Options( array(
-				'name' => 'Check Variables',
-				'callback' => 'check_var',
-				'setting_button' => QMCV_PLUGIN_NAME
+				'dir_name' => QMCV_PLUGIN_NAME,
+				'metabox' => array(
+					'donation' => array(
+						'position' => 'side',
+						'template' => QMCV_VIEW_DIR . 'admin.metabox.donation.php'
+					),
+					'save settings' => array(
+						'position' => 'side',
+						'template' => QMCV_VIEW_DIR . 'admin.metabox.save.php'
+					),
+					'option' => array(
+						'template' => QMCV_VIEW_DIR . 'admin.metabox.option.php'
+					),
+				)
 			) );
 		}
 	}

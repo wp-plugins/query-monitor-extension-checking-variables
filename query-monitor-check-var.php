@@ -3,7 +3,7 @@
  * Plugin Name: Query Monitor Extension - Checking Variables
  * Plugin URI: http://www.sujinc.com/
  * Description: Variables Checker for Developers
- * Version: 3.0.1
+ * Version: 3.0.2
  * Author: Sujin 수진 Choi
  * Author URI: http://www.sujinc.com/
  * License: GPLv3 or later

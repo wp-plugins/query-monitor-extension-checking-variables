@@ -22,21 +22,21 @@ class Check_Variables_Options extends WP_Admin_Page {
 	);
 	private static $options = array();
 
-	function check_var() {
-		if( $_POST && wp_verify_nonce( $_POST['security'], 'QMCV_options' ) ) {
-			$options = array(
-				'query_monitor' => isset( $_POST['query_monitor'] ),
-				'footer' => isset( $_POST['footer'] ),
-				'console' => isset( $_POST['console'] ),
-				'hide' => isset( $_POST['hide'] ),
-				'capability' => array_keys( $_POST['capability'] ),
-				'users' => $_POST['users']
-			);
+	function save_setting() {
+		if ( !parent::save_setting() ) return false;
 
-			self::set_options( $options );
-		}
+		$capability = ( !is_array( $_POST['capability'] ) ) ? array() : $_POST['capability'];
 
-		include_once( QMCV_VIEW_DIR . 'admin_options.php' );
+		$options = array(
+			'query_monitor' => isset( $_POST['query_monitor'] ),
+			'footer' => isset( $_POST['footer'] ),
+			'console' => isset( $_POST['console'] ),
+			'hide' => isset( $_POST['hide'] ),
+			'capability' => array_keys( $capability ),
+			'users' => $_POST['users']
+		);
+
+		self::set_options( $options );
 	}
 
 	public function __call( $name, $arguments ) {

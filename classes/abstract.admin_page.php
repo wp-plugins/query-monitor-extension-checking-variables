@@ -4,7 +4,7 @@
  *
  * @author Sujin 수진 Choi
  * @package wp-hacks
- * @version 1.0.1
+ * @version 1.0.2
  *
  */
 
@@ -16,22 +16,38 @@ if ( !defined( 'ABSPATH' ) ) {
 
 if ( !class_exists('WP_Admin_Page' ) ) {
 	abstract class WP_Admin_Page {
-		private $position;
-		private $page_name;
-		private $capability;
-		private $callback;
-		private $key;
+		protected $position;
+		protected $page_name;
+		protected $capability;
+		protected $callback;
+		protected $key;
+		protected $metabox;
 
-		private $file;
-		public $url;
+		protected $dir_name;
+		protected $template;
+		protected $url;
 
 		public function __call( $name, $arguments ) {
 			if ( $name === 'view_' . $this->callback ) {
+				$this->save_setting();
+
+				# Template
+				if ( $this->metabox ) {
+					$this->add_meta_box();
+				}
+
 				$this->page__header();
-				$this->{ $this->callback }();
+				if ( $this->callback ) {
+					$this->{ $this->callback }();
+				}
 				$this->page__footer();
 
 				return true;
+			}
+
+			if ( strpos( $name, 'metabox_' ) !== false ) {
+				$key = substr( $name, 8 );
+				include_once( $this->metabox[$key]['template'] );
 			}
 
 			return false;
@@ -40,24 +56,55 @@ if ( !class_exists('WP_Admin_Page' ) ) {
 		function __construct( $options = array() ) {
 			extract( shortcode_atts( array(
 				'position' => 'option',
-				'name' => 'Page Name',
+				'name' => '',
 				'cap' =>'activate_plugins',
-				'callback' => 'view_option',
-				'setting_button' => false
+				'callback' => 'view_callback',
+				'dir_name' => false,
+				'template' => false,
+				'metabox' => false
 			), $options ) );
 
 			$this->position = $position;
-			$this->page_name = $name;
 			$this->capability = $cap;
 			$this->callback = $callback;
 			$this->key = get_class( $this );
+			$this->page_name = ( $name ) ? $name : ucwords( str_replace( '_', ' ', $this->key ) );
+			$this->template = $template;
+
+			// Metabox Setting
+			if ( $metabox && is_array( $metabox ) ) {
+				$metabox_ = array();
+
+				foreach( $metabox as $key => $val ) {
+					if ( $val['template'] ) {
+						$key_ = str_replace( ' ', '_', strtolower( $key ) );
+						$name_ = ucwords( str_replace( '_', ' ', $key_ ) );
+						$position_ = ( $val['position'] ) ? $val['position'] : 'normal';
+
+						$metabox_[$key_] = array(
+							'position' => $position_,
+							'template' => $val['template'],
+							'name' => $name_
+						);
+					}
+				}
+
+				$this->metabox = $metabox_;
+			}
 
 			add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 
-			if ( $setting_button ) {
+			if ( $dir_name ) {
 				add_filter( 'plugin_row_meta' , array( $this, 'add_setting_into_plugins_table' ), 15, 3 );
-				$this->file = $setting_button;
+				$this->dir_name = $dir_name;
 			}
+		}
+
+		protected function save_setting() {
+			if( !$_POST || !wp_verify_nonce( $_POST['security'], $this->key ) ) return false;
+
+			$this->show_message( 'Saved!' );
+			return true;
 		}
 
 		function add_admin_menu() {
@@ -70,7 +117,20 @@ if ( !class_exists('WP_Admin_Page' ) ) {
 		}
 
 		function page__header() {
-			printf( '<div class="wrap" id="%s"><h2>%s</h2><div class="clear"></div>', $this->key, $this->page_name );
+			printf( '<div class="wrap" id="%s">', $this->key );
+				printf( '<h2>%s</h2>', $this->page_name );
+				echo '<div class="clear"></div>';
+
+			# Template
+			if ( $this->template ) {
+				include_once( $this->template );
+			} else {
+				printf( '<form id="form-%s" method="POST">', $this->key );
+				printf( '<input type="hidden" name="security" value="%s" />', wp_create_nonce( $this->key ) );
+				if ( $this->metabox ) {
+					$this->show_metabox();
+				}
+			}
 		}
 
 		function page__footer() {
@@ -78,13 +138,51 @@ if ( !class_exists('WP_Admin_Page' ) ) {
 		}
 
 		function add_setting_into_plugins_table( $plugin_meta, $file, $plugin_data ) {
-			if ( strpos( $file, $this->file ) !== false ) {
+			if ( $this->dir_name && strpos( $file, $this->dir_name ) !== false ) {
 				$plugin_meta[] = sprintf( '<a href="%s">Setting</a>', $this->url );
 			}
 
 			return $plugin_meta;
 		}
+
+		protected function show_message( $text, $class = 'updated' ) {
+			printf( '<div id="message" class="%s"><p>%s</a></p></div>', $class, $text );
+		}
+
+		protected function add_meta_box() {
+			foreach ( $this->metabox as $key => $metabox ) {
+				add_meta_box(
+					$key,
+					$metabox['name'],
+					array( $this, 'metabox_' . $key ),
+					false,
+					$metabox['position']
+				);
+			}
+		}
+
+		public function show_metabox() {
+			wp_enqueue_script( 'postbox' );
+			?>
+			<div id="poststuff">
+				<div id="post-body" class="metabox-holder columns-2">
+					<div id="postbox-container-1" class="postbox-container inner-sidebar">
+						<?php do_meta_boxes( false, 'side', false ); ?>
+					</div>
+
+					<div id="postbox-container-2" class="postbox-container meta-box-sortables">
+						<?php do_meta_boxes( false, 'normal', false ); ?>
+						<?php do_meta_boxes( false, 'advanced', false ); ?>
+					</div>
+				</div>
+			</div>
+			<script>
+			jQuery( document ).ready( function($) {
+				postboxes.add_postbox_toggles();
+			});
+			</script>
+			<?php
+		}
 	}
 }
-
 
