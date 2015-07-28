@@ -3,7 +3,7 @@
  * Input and Output
  *
  * project	Query Monitor Extension - Checking Variables
- * version	3.0
+ * version	3.0.3
  * Author: Sujin 수진 Choi
  * Author URI: http://www.sujinc.com/
  *
@@ -213,12 +213,13 @@ class QMCV_IO {
 		foreach( $message_sandbox as $key => $message ) {
 			$protected = $private = '';
 
-			if ( $protected_position = strstr( $key, ':protected' ) !== false ) {
+			$protected_position = strpos( $key, ':protected' );
+			if ( $protected_position !== false ) {
 				$key = substr( $key, 0, $protected_position );
 				$protected = '<span class="class_keyword">:protected</span>';
 			}
-
-			if ( $private_position = strstr( $key, ':private' ) !== false ) {
+			$private_position = strpos( $key, ':private' );
+			if ( $private_position !== false ) {
 				$key = substr( $key, 0, $private_position );
 				$private = '<span class="class_keyword">:private</span>';
 			}
@@ -249,11 +250,10 @@ if( !function_exists( 'console' ) ) {
 	*/
 
 	function console() {
-		$src = debug_backtrace();
-
-		foreach( func_get_args() as $message ) {
-			$idx = strpos($src[0]['file'], 'id.php') ? 1 : 0;
-			$src = (object)$src[$idx];
+		$debug_backtrace = (array) debug_backtrace();
+		foreach( func_get_args() as $message_key => $message ) {
+			$idx = strpos($debug_backtrace[$message_key]['file'], 'id.php') ? 1 : 0;
+			$src = (object)$debug_backtrace[$idx];
 			$file = file($src->file);
 
 			$i = 1;
@@ -262,8 +262,9 @@ if( !function_exists( 'console' ) ) {
 			} while (strpos($line, 'console') === false);
 
 			preg_match('/console\((.+?)\)?(?:$|;|\?>)/', $line, $m);
+
 			$key = $m[1];
-			$key = trim(explode(',', $key)[0]);
+			$key = trim(explode(',', $key)[$message_key]);
 
 			QMCV_IO::$message[] = array(
 				'message' => print_r( $message, true ),

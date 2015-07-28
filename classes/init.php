@@ -3,7 +3,7 @@
  * Initialize
  *
  * project	Query Monitor Extension - Checking Variables
- * version	3.0
+ * version	3.0.3
  * Author: Sujin 수진 Choi
  * Author URI: http://www.sujinc.com/
  *
