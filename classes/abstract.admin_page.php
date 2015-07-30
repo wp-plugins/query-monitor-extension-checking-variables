@@ -22,6 +22,7 @@ if ( !class_exists('WP_Admin_Page' ) ) {
 		protected $callback;
 		protected $key;
 		protected $metabox;
+		protected $action_link_text;
 
 		protected $dir_name;
 		protected $template;
@@ -66,7 +67,8 @@ if ( !class_exists('WP_Admin_Page' ) ) {
 				'callback' => 'view_callback',
 				'dir_name' => false,
 				'template' => false,
-				'metabox' => false
+				'metabox' => false,
+				'action_link_text' => 'Setting'
 			), $options ) );
 
 			$this->position = $position;
@@ -75,6 +77,7 @@ if ( !class_exists('WP_Admin_Page' ) ) {
 			$this->key = get_class( $this );
 			$this->page_name = ( $name ) ? $name : ucwords( str_replace( '_', ' ', $this->key ) );
 			$this->template = $template;
+			$this->action_link_text = $action_link_text;
 
 			// Metabox Setting
 			if ( $metabox && is_array( $metabox ) ) {
@@ -103,6 +106,12 @@ if ( !class_exists('WP_Admin_Page' ) ) {
 				add_filter( 'plugin_action_links' , array( $this, 'plugin_action_link' ), 15, 2 );
 				$this->dir_name = $dir_name;
 			}
+
+			switch ( $this->position ) {
+				case 'option' :
+					$this->url = admin_url( 'options-general.php?page=' . $this->key );
+				break;
+			}
 		}
 
 		protected function save_setting() {
@@ -116,7 +125,6 @@ if ( !class_exists('WP_Admin_Page' ) ) {
 			switch ( $this->position ) {
 				case 'option' :
 					add_options_page( $this->page_name, $this->page_name, $this->capability, $this->key, array( $this, 'view_' . $this->callback ));
-					$this->url = admin_url( 'options-general.php?page=' . $this->key );
 				break;
 			}
 		}
@@ -150,7 +158,7 @@ if ( !class_exists('WP_Admin_Page' ) ) {
 		 */
 		function plugin_action_link( $actions, $plugin_file ) {
 			if ( $this->dir_name && strpos( $plugin_file, $this->dir_name ) !== false ) {
- 				$actions[] = sprintf( '<a href="%s">Setting</a>', $this->url );
+ 				$actions[] = sprintf( '<a href="%s">%s</a>', $this->url, $this->action_link_text );
 			}
 
 			return $actions;
@@ -193,6 +201,11 @@ if ( !class_exists('WP_Admin_Page' ) ) {
 			});
 			</script>
 			<?php
+		}
+
+		public function is_setting_page() {
+			$url = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+			return ( $this->url == $url );
 		}
 	}
 }
